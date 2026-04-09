@@ -7,4 +7,5 @@ from .audio_classifier_processor import AudioClassifierProcessor
 from .imu_tracker_processor import IMUTrackerProcessor
 from .universal_processor import UniversalProcessor
 from .mmwave_detector_processor import MMWaveDetectorProcessor
+from .v5lite_detector_processor import V5LiteDetectorProcessor
 

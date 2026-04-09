@@ -1,0 +1,29 @@
+position: both
+pod-template:
+  image: v5lite-detection:shy
+  imagePullPolicy: Always
+  env:
+    - name: PROCESSOR_NAME
+      value: "v5lite_detector_processor"
+    - name: SCENARIOS_EXTRACTORS
+      value: "[]"
+    - name: PRO_QUEUE_NAME
+      value: "simple"
+    - name: SERVICE_NAME
+      value: "processor-v5lite-detection"
+    - name: V5LITE_MODEL_PATH
+      value: "v5lite_s.onnx"
+    - name: V5LITE_LABEL_PATH
+      value: "label_names"
+    - name: V5LITE_CONF_THRESHOLD
+      value: "0.2"
+    - name: V5LITE_NMS_THRESHOLD
+      value: "0.5"
+    - name: V5LITE_MODEL_NAME
+      value: "v5lite_s"
+port-open:
+  pos: both
+  port: 9000
+file-mount:
+  - pos: both
+    path: "processor/v5lite-detection/"
