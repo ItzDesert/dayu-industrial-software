@@ -10,7 +10,19 @@ from .v5lite_stream import yolov5_lite
 
 class V5LiteDetector:
 
-    def __init__(self, model_path, label_path, conf_threshold=0.2, nms_threshold=0.5, model_name=None):
+    def __init__(self, model_path=None, label_path=None, conf_threshold=None, nms_threshold=None, model_name=None):
+        # 兼容通过 DETECTOR_PARAMETERS 传入 kwargs 和通过旧 V5LITE_* 独立环境变量两种方式
+        if model_path is None:
+            model_path = Context.get_parameter('V5LITE_MODEL_PATH')
+        if label_path is None:
+            label_path = Context.get_parameter('V5LITE_LABEL_PATH')
+        if conf_threshold is None:
+            conf_threshold = Context.get_parameter('V5LITE_CONF_THRESHOLD', 0.2)
+        if nms_threshold is None:
+            nms_threshold = Context.get_parameter('V5LITE_NMS_THRESHOLD', 0.5)
+        if model_name is None:
+            model_name = Context.get_parameter('V5LITE_MODEL_NAME', None)
+
         model_path = Context.get_file_path(model_path)
         label_path = Context.get_file_path(label_path)
 
