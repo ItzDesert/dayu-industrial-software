@@ -1,12 +1,12 @@
-source_name: "发泡塑料产线摄像头"
+source_name: "钢材缺陷检测摄像头"
 source_type: "video"
 source_mode: "rtsp_video"
 source_list:
-  - name: "ixpe_camera_0"
+  - name: "v5lite_camera_0"
     url: ""
-    dir: "edge_eye_0/"
+    dir: "v5lite/"
     metadata:
-      resolution: "540p"
+      resolution: "480p"
       fps: 30
       encoding: "mp4v"
       buffer_size: 2
