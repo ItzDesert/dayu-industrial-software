@@ -20,7 +20,7 @@ pod-template:
     - name: SCH_AGENT_NAME
       value: fixed
     - name: SCH_AGENT_PARAMETERS
-      value: "{'configuration':{}, 'offloading':{'v5lite-detection': 'edgex3'}}"
+      value: "{'configuration':{'fps': 1, 'buffer_size': 1}, 'offloading':{'v5lite-detection': 'edgex3'}}"
 port-open:
   pos: cloud
   port: 9000

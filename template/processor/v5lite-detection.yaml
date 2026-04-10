@@ -8,11 +8,11 @@ pod-template:
     - name: DETECTOR_PARAMETERS
       value: >
         {
-          'model_path': 'v5lite_s.onnx',
+          'model_path': 'v5lite_g.onnx',
           'label_path': 'label_names',
           'conf_threshold': 0.2,
           'nms_threshold': 0.5,
-          'model_name': 'v5lite_s'
+          'model_name': 'v5lite_g'
         }
     - name: SCENARIOS_EXTRACTORS
       value: "['obj_num']"

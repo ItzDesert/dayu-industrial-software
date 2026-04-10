@@ -1,9 +1,10 @@
-allow-flexible-switch: true
+allow-flexible-switch: false
 base:
   - name: 帧可视化
     type: image
     variables: [ "Frame with Regions of Interest" ]
     hook_name: roi_frame
+    hook_params: "{'label_names': ['bruise', 'laps', 'scratches']}"
     save_expense: true
     size: 1
   - name: 任务端到端时延曲线
