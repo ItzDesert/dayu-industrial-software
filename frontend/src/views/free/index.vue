@@ -582,6 +582,22 @@ export default {
           })
         })
 
+        Object.entries(configUpdates).forEach(([sourceId, updates]) => {
+          const newConfig = [...(this.visualizationConfig[sourceId] || [])]
+          updates.forEach(({vizId, newVariables}) => {
+            const index = newConfig.findIndex(v => v.id === vizId)
+            if (index !== -1) {
+              const updatedViz = {
+                ...newConfig[index],
+                variables: [...newVariables],
+                variablesHash: this.calculateVariablesHash(newVariables)
+              }
+              newConfig.splice(index, 1, updatedViz)
+            }
+          })
+          this.visualizationConfig[sourceId] = newConfig
+        })
+
         this.bufferedTaskCache = newCache
       } catch (error) {
         console.error('Error fetching task results:', error)
