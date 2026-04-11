@@ -1,4 +1,4 @@
-allow-flexible-switch: true
+allow-flexible-switch: false
 base:
   - name: 任务端到端时延曲线
     type: cdf

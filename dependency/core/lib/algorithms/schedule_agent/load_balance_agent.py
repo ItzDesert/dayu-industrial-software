@@ -2,7 +2,7 @@ import abc
 import random
 import time
 
-from core.lib.common import ClassFactory, ClassType, KubeConfig, Context, ConfigLoader, LOGGER
+from core.lib.common import ClassFactory, ClassType, Context, ConfigLoader, LOGGER
 from core.lib.estimation import OverheadEstimator
 
 from .base_agent import BaseAgent
@@ -52,9 +52,6 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
         with self.overhead_estimator:
             cloud_device = self.cloud_device
             source_edge_device = info['source_device']
-            all_edge_devices = info['all_edge_devices']
-            all_devices = [*all_edge_devices, cloud_device]
-            service_info = KubeConfig.get_service_nodes_dict()
 
             dag = info['dag']
 
@@ -75,12 +72,8 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
             for service_name in dag:
                 if service_name == 'start':
                     dag[service_name]['service']['execute_device'] = source_edge_device
-                elif (service_name == self.service_name
-                      and service_name in service_info
-                      and target in all_devices):
+                elif service_name == self.service_name:
                     dag[service_name]['service']['execute_device'] = target
-                elif service_name not in ('start', 'end') and service_name in service_info:
-                    dag[service_name]['service']['execute_device'] = cloud_device
                 else:
                     dag[service_name]['service']['execute_device'] = cloud_device
 
