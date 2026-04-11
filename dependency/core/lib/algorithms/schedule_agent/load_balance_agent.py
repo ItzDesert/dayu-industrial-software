@@ -52,6 +52,8 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
         with self.overhead_estimator:
             cloud_device = self.cloud_device
             source_edge_device = info['source_device']
+            all_edge_devices = info['all_edge_devices']
+            all_devices = [*all_edge_devices, cloud_device]
 
             dag = info['dag']
 
@@ -60,13 +62,14 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
 
             if in_alert:
                 fps = self.alert_fps
-                target = random.choices(self.lb_targets, weights=self.lb_weights, k=1)[0]
+                candidate = random.choices(self.lb_targets, weights=self.lb_weights, k=1)[0]
+                target = candidate if candidate in all_devices else cloud_device
                 remaining = self.alert_duration - (time.time() - self._last_defect_time)
                 LOGGER.info(f'[LoadBalance] Alert state → fps={fps}, target={target}, '
                             f'expires in {remaining:.1f}s')
             else:
                 fps = self.default_fps
-                target = self.default_target
+                target = self.default_target if self.default_target in all_devices else cloud_device
                 LOGGER.info(f'[LoadBalance] Idle state → fps={fps}, target={target}')
 
             for service_name in dag:

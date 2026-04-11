@@ -17,7 +17,7 @@ pod-template:
     - name: SCENARIOS_EXTRACTORS
       value: "['obj_num']"
     - name: PRO_QUEUE_NAME
-      value: "simple"
+      value: "priority"
     - name: SERVICE_NAME
       value: "processor-v5lite-detection"
 port-open:
