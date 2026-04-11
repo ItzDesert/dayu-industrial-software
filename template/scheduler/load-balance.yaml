@@ -1,6 +1,6 @@
 position: cloud
 pod-template:
-  image: scheduler
+  image: scheduler:shy
   imagePullPolicy: Always
   env:
     - name: SCH_CONFIG_EXTRACTION_NAME
@@ -18,12 +18,12 @@ pod-template:
     - name: SCH_DEPLOYMENT_POLICY_NAME
       value: full
     - name: SCH_AGENT_NAME
-      value: fixed
+      value: load_balance
     - name: SCH_AGENT_PARAMETERS
-      value: "{'configuration':{'fps': 10, 'buffer_size': 1}, 'offloading':{'v5lite-detection': 'edge3'}}"
+      value: "{'default_fps': 3, 'alert_fps': 6, 'buffer_size': 1, 'default_target': 'edgexn13', 'service_name': 'v5lite-detection', 'lb_targets': ['cloud.kubeedge', 'edgex3', 'edgexn13'], 'lb_weights': [1, 1, 2]}"
 port-open:
   pos: cloud
   port: 9000
 file-mount:
   - pos: cloud
-    path: 'scheduler/fixed/'
+    path: 'scheduler/load_balance/'
