@@ -6,38 +6,6 @@
     controller: controller-no-delete.yaml
     distributor: distributor-base.yaml
     monitor: monitor-base.yaml
-- id: fix-policy-edge3
-  name: Fixed Policy Edge3 (v5lite on edge3)
-  yaml: fix-policy-edge3.yaml
-  dependency:
-    generator: generator-base.yaml
-    controller: controller-no-delete.yaml
-    distributor: distributor-base.yaml
-    monitor: monitor-base.yaml
-- id: fix-policy-edgex3
-  name: Fixed Policy Edgex3 (v5lite on edgex3)
-  yaml: fix-policy-edgex3.yaml
-  dependency:
-    generator: generator-base.yaml
-    controller: controller-no-delete.yaml
-    distributor: distributor-base.yaml
-    monitor: monitor-base.yaml
-- id: fix-policy-edgexn13
-  name: Fixed Policy Edgexn13 (v5lite on edgexn13)
-  yaml: fix-policy-edgexn13.yaml
-  dependency:
-    generator: generator-base.yaml
-    controller: controller-no-delete.yaml
-    distributor: distributor-base.yaml
-    monitor: monitor-base.yaml
-- id: fix-policy-cloud-kubeedge
-  name: Fixed Policy Cloud KubeEdge (v5lite on cloud.kubeedge)
-  yaml: fix-policy-cloud-kubeedge.yaml
-  dependency:
-    generator: generator-base.yaml
-    controller: controller-no-delete.yaml
-    distributor: distributor-base.yaml
-    monitor: monitor-base.yaml
 - id: load-balance
   name: Load Balance
   yaml: load-balance.yaml
