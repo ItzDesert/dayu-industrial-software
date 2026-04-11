@@ -86,6 +86,8 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
                 'dag': dag,
             }
 
+            time.sleep(0.001)
+
         return policy
 
     def run(self):

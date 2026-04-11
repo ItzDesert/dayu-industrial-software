@@ -4,7 +4,7 @@ base:
     warning: "任务出现严重超时"
     hook_name: delay_timeout
     hook_params: '{"threshold":3}'
-    warning_interval: 10
+    warning_interval: 0
   - name: 钢材缺陷检测告警
     warning: "检测到钢材表面缺陷"
     hook_name: v5lite_defect
