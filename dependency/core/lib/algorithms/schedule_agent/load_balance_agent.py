@@ -1,5 +1,6 @@
 import abc
 import random
+import time
 
 from core.lib.common import ClassFactory, ClassType, KubeConfig, Context, ConfigLoader, LOGGER
 from core.lib.estimation import OverheadEstimator
@@ -16,6 +17,7 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
 
     空闲态（无缺陷）：使用默认 fps 与固定卸载节点。
     告警态（检测到 bbox）：切换至告警 fps，并按权重随机分发至多个节点，实现负载均衡。
+    告警态持续 alert_duration 秒；若期间无新缺陷触发，超时后自动回归空闲态。
     """
 
     def __init__(self, system, agent_id: int,
@@ -25,7 +27,8 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
                  default_target: str = 'edgexn13',
                  service_name: str = 'v5lite-detection',
                  lb_targets: list = None,
-                 lb_weights: list = None):
+                 lb_weights: list = None,
+                 alert_duration: float = 3.0):
         super().__init__()
 
         self.agent_id = agent_id
@@ -37,9 +40,11 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
         self.default_target = default_target
         self.service_name = service_name
         self.lb_targets = lb_targets if lb_targets is not None else ['cloud.kubeedge', 'edgex3', 'edgexn13']
-        self.lb_weights = lb_weights if lb_weights is not None else [1, 1, 2]
+        self.lb_weights = lb_weights if lb_weights is not None else [1, 1, 1]
+        self.alert_duration = alert_duration
 
-        self.has_defect = False
+        # 最近一次检测到缺陷的时间戳；None 表示从未触发
+        self._last_defect_time: float = None
 
         self.overhead_estimator = OverheadEstimator('LoadBalance', 'scheduler/load_balance')
 
@@ -53,14 +58,19 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
 
             dag = info['dag']
 
-            if self.has_defect:
+            in_alert = (self._last_defect_time is not None
+                        and time.time() - self._last_defect_time < self.alert_duration)
+
+            if in_alert:
                 fps = self.alert_fps
                 target = random.choices(self.lb_targets, weights=self.lb_weights, k=1)[0]
-                LOGGER.info(f'[LoadBalance] Defect detected → fps={fps}, target={target}')
+                remaining = self.alert_duration - (time.time() - self._last_defect_time)
+                LOGGER.info(f'[LoadBalance] Alert state → fps={fps}, target={target}, '
+                            f'expires in {remaining:.1f}s')
             else:
                 fps = self.default_fps
                 target = self.default_target
-                LOGGER.info(f'[LoadBalance] No defect → fps={fps}, target={target}')
+                LOGGER.info(f'[LoadBalance] Idle state → fps={fps}, target={target}')
 
             for service_name in dag:
                 if service_name == 'start':
@@ -87,10 +97,8 @@ class LoadBalanceAgent(BaseAgent, abc.ABC):
 
     def update_scenario(self, scenario):
         obj_num = scenario.get('obj_num', [])
-        if obj_num:
-            self.has_defect = any(n > 0 for n in obj_num)
-        else:
-            self.has_defect = False
+        if obj_num and any(n > 0 for n in obj_num):
+            self._last_defect_time = time.time()
 
     def update_resource(self, device, resource):
         pass
