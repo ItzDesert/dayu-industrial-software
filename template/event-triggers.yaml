@@ -1,10 +1,14 @@
-allow-flexible-switch: true
+allow-flexible-switch: false
 base:
   - name: 任务时长告警
     warning: "任务出现严重超时"
     hook_name: delay_timeout
     hook_params: '{"threshold":3}'
     warning_interval: 10
+  - name: 钢材缺陷检测告警
+    warning: "检测到钢材表面缺陷"
+    hook_name: v5lite_defect
+    warning_interval: 0
 video:
   - name: 任务时长告警
     warning: "任务出现严重超时"
