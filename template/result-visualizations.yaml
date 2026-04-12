@@ -1,11 +1,5 @@
 allow-flexible-switch: true
 base:
-  - name: 帧可视化
-    type: image
-    variables: [ "Frame with Regions of Interest" ]
-    hook_name: roi_frame
-    save_expense: true
-    size: 1
   - name: 任务端到端时延曲线
     type: cdf
     x_axis: 时延
@@ -26,12 +20,19 @@ base:
     hook_name: dag_offloading
     size: 2
 video:
-  - name: 发泡塑料制造画面
+  - name: 帧可视化
     type: image
-    variables: [ "发泡塑料制造画面" ]
-    hook_name: edge_frame
+    variables: [ "Frame with Regions of Interest" ]
+    hook_name: roi_frame
+    hook_params: "{'label_names': ['bruise', 'laps', 'scratches']}"
     save_expense: true
     size: 1
+#  - name: 发泡塑料制造画面
+#    type: image
+#    variables: [ "发泡塑料制造画面" ]
+#    hook_name: edge_frame
+#    save_expense: true
+#    size: 1
   - name: 任务端到端时延曲线
     type: cdf
     x_axis: 时延
@@ -39,12 +40,19 @@ video:
     variables: [ "端到端时延" ]
     hook_name: e2e_delay
     size: 1
-  - name: 发泡塑料边缘位置曲线
+#  - name: 发泡塑料边缘位置曲线
+#    type: curve
+#    x_axis: 任务序号
+#    y_axis: 边缘位置
+#    variables: [ "左边缘","右边缘" ]
+#    hook_name: edge_eye_position
+#    size: 1
+  - name: 目标数量曲线
     type: curve
     x_axis: 任务序号
-    y_axis: 边缘位置
-    variables: [ "左边缘","右边缘" ]
-    hook_name: edge_eye_position
+    y_axis: 数量
+    variables: [ "目标数量" ]
+    hook_name: obj_num
     size: 1
   - name: 服务卸载状态拓扑图
     type: topology

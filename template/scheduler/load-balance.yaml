@@ -1,0 +1,29 @@
+position: cloud
+pod-template:
+  image: scheduler:shy
+  imagePullPolicy: Always
+  env:
+    - name: SCH_CONFIG_EXTRACTION_NAME
+      value: simple
+    - name: SCH_SCENARIO_EXTRACTION_NAME
+      value: simple
+    - name: SCH_STARTUP_POLICY_NAME
+      value: fixed
+    - name: SCH_POLICY_EXTRACTION_NAME
+      value: simple
+    - name: SCH_SELECTION_POLICY_NAME
+      value: fixed
+    - name: SCH_SELECTION_POLICY_PARAMETERS
+      value: "{'fixed_value':0, 'fixed_type':'position'}"
+    - name: SCH_DEPLOYMENT_POLICY_NAME
+      value: full
+    - name: SCH_AGENT_NAME
+      value: load_balance
+    - name: SCH_AGENT_PARAMETERS
+      value: "{'default_fps': 3, 'alert_fps': 6, 'buffer_size': 1, 'default_target': 'edgexn13', 'service_name': 'v5lite-detection', 'lb_targets': ['cloud.kubeedge', 'edgex3', 'edgexn13'], 'lb_weights': [1, 1, 1], 'alert_duration': 3.0}"
+port-open:
+  pos: cloud
+  port: 9000
+file-mount:
+  - pos: cloud
+    path: 'scheduler/load_balance/'

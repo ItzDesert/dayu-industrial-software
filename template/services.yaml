@@ -54,3 +54,10 @@
   input: mmwave_data
   output: text
   yaml: mmwave-detection.yaml
+- id: v5lite-detection
+  service: v5lite-detection
+  name: 工业钢材缺陷检测
+  description: v5lite-detection
+  input: frame
+  output: bbox
+  yaml: v5lite-detection.yaml

@@ -7,13 +7,6 @@ base:
     variables: [ "端到端时延" ]
     hook_name: e2e_delay
     size: 3
-  - name: 目标数量曲线
-    type: curve
-    x_axis: 任务序号
-    y_axis: 数量
-    variables: [ "目标数量" ]
-    hook_name: obj_num
-    size: 3
 video:
   - name: 任务端到端时延曲线
     type: cdf
@@ -22,13 +15,20 @@ video:
     variables: [ "端到端时延" ]
     hook_name: e2e_delay
     size: 3
-  - name: 发泡塑料边缘位置曲线
+  - name: 目标数量曲线
     type: curve
     x_axis: 任务序号
-    y_axis: 边缘位置
-    variables: [ "左边缘","右边缘" ]
-    hook_name: edge_eye_position
+    y_axis: 数量
+    variables: [ "目标数量" ]
+    hook_name: obj_num
     size: 3
+#  - name: 发泡塑料边缘位置曲线
+#    type: curve
+#    x_axis: 任务序号
+#    y_axis: 边缘位置
+#    variables: [ "左边缘","右边缘" ]
+#    hook_name: edge_eye_position
+#    size: 3
 audio:
   - name: 任务端到端时延曲线
     type: cdf

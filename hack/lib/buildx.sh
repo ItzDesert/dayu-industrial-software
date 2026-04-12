@@ -83,6 +83,7 @@ dayu::buildx::import_docker_info() {
     [imu-trajectory-sensing]="build/imu_trajectory_sensing.Dockerfile"
     [waveform-detection]="build/waveform_detection.Dockerfile"
     [mmwave-detection]="build/mmwave_detection.Dockerfile"
+    [v5lite-detection]="build/v5lite_detection.Dockerfile"
   )
   # Corresponding platforms
   declare -g -A PLATFORMS=(
@@ -104,6 +105,7 @@ dayu::buildx::import_docker_info() {
     [imu-trajectory-sensing]="linux/amd64,linux/arm64"
     [waveform-detection]="linux/amd64,linux/arm64"
     [mmwave-detection]="linux/amd64,linux/arm64"
+    [v5lite-detection]="linux/amd64,linux/arm64"
   )
   # Images requiring special treatment, their platforms, and Dockerfiles
   declare -g -A SPECIAL_BUILD=(

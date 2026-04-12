@@ -6,6 +6,14 @@
     controller: controller-no-delete.yaml
     distributor: distributor-base.yaml
     monitor: monitor-base.yaml
+- id: load-balance
+  name: Load Balance
+  yaml: load-balance.yaml
+  dependency:
+    generator: generator-base.yaml
+    controller: controller-no-delete.yaml
+    distributor: distributor-base.yaml
+    monitor: monitor-base.yaml
 - id: adaptive_feedback
   name: Adaptive Feedback Policy
   yaml: adaptive-feedback.yaml
