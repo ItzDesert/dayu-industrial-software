@@ -1,4 +1,4 @@
-namespace: shy-dayu-is
+namespace: dayu-is
 system-name: "感算控多设备协同与多类型任务实时调度系统"
 log-level: DEBUG
 log-file-name:
@@ -14,7 +14,7 @@ default-image-meta:
   tag: v1.1
 default-file-mount-prefix: "/data/dayu-industrial-software-files"
 datasource:
-  use-simulation: false
+  use-simulation: true
   node: edgex1
   data-root: "/data/datasource-is/"
   play-mode: cycle

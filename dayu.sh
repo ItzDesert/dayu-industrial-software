@@ -163,7 +163,7 @@ spec:
           - env:
             - name: GUNICORN_PORT
               value: "8000"
-            image: $REGISTRY/$REPOSITORY/backend:shy
+            image: $REGISTRY/$REPOSITORY/backend:$TAG
             imagePullPolicy: Always
             name: backend
             ports:
@@ -211,7 +211,7 @@ spec:
               value: 'false'
             - name: VITE_PUBLIC_PATH
               value: /vue-next-admin-preview/
-            image: $REGISTRY/$REPOSITORY/frontend:shy
+            image: $REGISTRY/$REPOSITORY/frontend:$TAG
             imagePullPolicy: Always
             name: frontend
             ports:
