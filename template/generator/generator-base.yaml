@@ -17,3 +17,6 @@ pod-template:
       value: simple
     - name: GEN_ASO_NAME
       value: simple
+file-mount:
+  - pos: edge
+    path: '/dev/'

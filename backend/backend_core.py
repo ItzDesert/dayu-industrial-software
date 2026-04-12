@@ -340,7 +340,11 @@ class BackendCore:
         return edge_nodes
 
     def check_simulation_datasource(self):
-        return KubeHelper.check_pod_name('datasource', namespace=self.namespace)
+        LOGGER.debug(f'****namespace: {self.namespace}')
+        result = KubeHelper.check_pod_name('datasource', namespace=self.namespace)
+        LOGGER.debug(f'****result: {result}')
+
+        return result
 
     def check_dag(self, dag):
 

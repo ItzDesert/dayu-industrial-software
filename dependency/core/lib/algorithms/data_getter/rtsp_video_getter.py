@@ -43,7 +43,8 @@ class RtspVideoGetter(BaseDataGetter, abc.ABC):
 
         ret, frame = self.data_source_capture.read()
         first_no_signal = True
-
+        LOGGER.debug(type(system.video_data_source))
+        LOGGER.debug(system.video_data_source)
         # retry when no video signal
         while not ret:
             if first_no_signal:
