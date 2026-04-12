@@ -223,6 +223,8 @@ class TemplateHelper:
 
             new_edge_worker['template']['spec']['nodeName'] = node
 
+            new_edge_worker['template']['spec']['volumes'] = [{'name':'camera-device', 'hostPath':{'path':'/dev/video0', 'type':'CharDevice'}}]
+
             container = new_edge_worker['template']['spec']['containers'][0]
 
             container['name'] += str(uuid.uuid4())
