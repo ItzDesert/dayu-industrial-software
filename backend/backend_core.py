@@ -54,6 +54,8 @@ class BackendCore:
             )
         )
 
+        self.parse_base_info()
+
         self.source_configs = []
 
         self.dags = []
@@ -86,7 +88,6 @@ class BackendCore:
 
         self.default_visualization_image = 'default_visualization.png'
 
-        self.parse_base_info()
 
     def parse_base_info(self):
         try:
