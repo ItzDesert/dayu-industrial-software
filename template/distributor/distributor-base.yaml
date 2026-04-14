@@ -1,6 +1,6 @@
 position: cloud
 pod-template:
-  image: distributor
+  image: distributor:shy
   imagePullPolicy: Always
   env:
 port-open:

@@ -23,11 +23,17 @@ class DataSource:
             'http_mmwave': 'python3 mmwave_source.py'
         }
 
-        self.backend_hostname = NodeInfo.get_cloud_node()
-        self.backend_port = PortInfo.get_component_port(SystemConstant.BACKEND.value)
-        self.backend_address = merge_address(NodeInfo.hostname2ip(self.backend_hostname),
-                                             port=self.backend_port,
-                                             path=NetworkAPIPath.BACKEND_DATASOURCE_STATE)
+        backend_addr = os.environ.get('DAYU_BACKEND_ADDRESS')
+        if backend_addr:
+            backend_ip, backend_port_str = backend_addr.rsplit(':', 1)
+            self.backend_address = merge_address(backend_ip, port=backend_port_str,
+                                                 path=NetworkAPIPath.BACKEND_DATASOURCE_STATE)
+        else:
+            self.backend_hostname = NodeInfo.get_cloud_node()
+            self.backend_port = PortInfo.get_component_port(SystemConstant.BACKEND.value)
+            self.backend_address = merge_address(NodeInfo.hostname2ip(self.backend_hostname),
+                                                 port=self.backend_port,
+                                                 path=NetworkAPIPath.BACKEND_DATASOURCE_STATE)
 
         self.inner_port = Context.get_parameter('GUNICORN_PORT')
 

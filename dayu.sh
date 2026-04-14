@@ -89,6 +89,7 @@ EOF
 
 create_datasource() {
   if [ "$DATASOURCE_USE_SIMULATION" = "true" ]; then
+    BACKEND_PORT=$(get_service_nodeport "backend-cloud" "$NAMESPACE")
     echo "$(green_text [DAYU]) Creating datasource ..."
     kubectl -n "$NAMESPACE" apply -f - <<EOF
 apiVersion: $API_VERSION
@@ -121,7 +122,13 @@ spec:
                   value: "8000"
                 - name: FILE_PREFIX
                   value: "$DATASOURCE_DATA_ROOT"
-              image: $REGISTRY/$REPOSITORY/datasource:$TAG
+                - name: NAMESPACE
+                  value: "$NAMESPACE"
+                - name: DAYU_NODE_ROLE
+                  value: "edge"
+                - name: DAYU_BACKEND_ADDRESS
+                  value: "$CLOUD_IP:$BACKEND_PORT"
+              image: $REGISTRY/$REPOSITORY/datasource:shy
               imagePullPolicy: Always
               name: datasource
               ports:
@@ -163,7 +170,7 @@ spec:
           - env:
             - name: GUNICORN_PORT
               value: "8000"
-            image: $REGISTRY/$REPOSITORY/backend:$TAG
+            image: $REGISTRY/$REPOSITORY/backend:shy
             imagePullPolicy: Always
             name: backend
             ports:
@@ -261,6 +268,7 @@ start_system() {
     create_service_account
     create_redis
     create_backend
+    sleep 3
     create_frontend
     create_datasource
     wait_for_pods_running

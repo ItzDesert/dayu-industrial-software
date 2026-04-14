@@ -1,6 +1,6 @@
 position: both
 pod-template:
-  image: monitor
+  image: monitor:shy
   imagePullPolicy: Always
   env:
     - name: INTERVAL

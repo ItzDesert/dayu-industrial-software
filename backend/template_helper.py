@@ -85,6 +85,14 @@ class TemplateHelper:
         edge_template = deep_merge(copy.deepcopy(template), yaml_doc['edge-pod-template']) \
             if 'edge-pod-template' in yaml_doc else copy.deepcopy(template)
 
+        if pos in ('edge', 'both'):
+            backend_ip = NodeInfo.hostname2ip(NodeInfo.get_cloud_node())
+            backend_port = PortInfo.get_component_port(SystemConstant.BACKEND.value)
+            edge_template['env'].extend([
+                {'name': 'DAYU_NODE_ROLE', 'value': 'edge'},
+                {'name': 'DAYU_BACKEND_ADDRESS', 'value': f'{backend_ip}:{backend_port}'}
+            ])
+
         cloud_template = {
             'serviceAccountName': service_account,
             'nodeName': '',

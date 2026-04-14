@@ -1,5 +1,5 @@
-import kubernetes as k8s
 from core.lib.common import Context, SystemConstant
+from core.lib.common.edge_proxy import is_edge_node, edge_proxy_request
 
 
 class PortInfo:
@@ -14,6 +14,13 @@ class PortInfo:
 
     @staticmethod
     def get_all_ports(keyword: str) -> dict:
+        if is_edge_node():
+            response = edge_proxy_request(f'/proxy/port_info/{keyword}')
+            if response:
+                return {k: int(v) for k, v in response['ports_dict'].items()}
+            return {}
+
+        import kubernetes as k8s
         ports_dict = {}
         k8s.config.load_incluster_config()
         v1 = k8s.client.CoreV1Api()

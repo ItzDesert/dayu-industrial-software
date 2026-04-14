@@ -1,9 +1,8 @@
 from typing import List
 
-from kubernetes import client, config
 from core.lib.common import reverse_key_value_in_dict, Context
+from core.lib.common.edge_proxy import is_edge_node, edge_proxy_request
 from core.lib.network import find_all_ips
-from core.lib.common import Context
 
 
 class NodeInfo:
@@ -37,6 +36,13 @@ class NodeInfo:
 
     @staticmethod
     def __extract_node_info():
+        if is_edge_node():
+            response = edge_proxy_request('/proxy/node_info')
+            if response:
+                return response['node_dict'], response['node_dict_reverse'], response['node_role']
+            raise RuntimeError('Failed to get node info from backend proxy')
+
+        from kubernetes import client, config
         config.load_incluster_config()
         v1 = client.CoreV1Api()
         nodes = v1.list_node().items

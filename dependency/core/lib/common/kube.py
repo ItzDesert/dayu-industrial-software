@@ -1,9 +1,9 @@
 from typing import List, Dict
-from kubernetes import client, config
 from collections import defaultdict
 import re
 
 from core.lib.common import Context
+from core.lib.common.edge_proxy import is_edge_node, edge_proxy_request
 
 
 class KubeConfig:
@@ -12,8 +12,9 @@ class KubeConfig:
     SERVICE_PATTERN = pattern = re.compile(r"^processor-(.+?)-(?:cloudworker|edgeworker)-")
 
     @classmethod
-    def _get_api(cls) -> client.CoreV1Api:
+    def _get_api(cls):
         if not cls._api:
+            from kubernetes import client, config
             config.load_incluster_config()
             cls._api = client.CoreV1Api()
         return cls._api
@@ -29,6 +30,12 @@ class KubeConfig:
                 ...,
             }
         """
+        if is_edge_node():
+            response = edge_proxy_request('/proxy/service_nodes')
+            if response:
+                return response['service_nodes']
+            return {}
+
         api = cls._get_api()
 
         pods = api.list_namespaced_pod(cls.NAMESPACE).items

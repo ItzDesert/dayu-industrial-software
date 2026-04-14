@@ -10,8 +10,8 @@ from starlette.responses import JSONResponse, FileResponse
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.lib.common import LOGGER, Counter, Queue, FileOps
-from core.lib.network import http_request, NetworkAPIMethod, NetworkAPIPath
+from core.lib.common import LOGGER, Counter, Queue, FileOps, KubeConfig
+from core.lib.network import http_request, NetworkAPIMethod, NetworkAPIPath, NodeInfo, PortInfo
 
 from backend_core import BackendCore
 from kube_helper import KubeHelper
@@ -181,6 +181,22 @@ class BackendServer:
                      self.get_priority_queue,
                      response_class=JSONResponse,
                      methods=[NetworkAPIMethod.BACKEND_PRIORITY_QUEUE]
+                     ),
+
+            APIRoute(NetworkAPIPath.BACKEND_PROXY_NODE_INFO,
+                     self.proxy_node_info,
+                     response_class=JSONResponse,
+                     methods=[NetworkAPIMethod.BACKEND_PROXY_NODE_INFO]
+                     ),
+            APIRoute(NetworkAPIPath.BACKEND_PROXY_PORT_INFO,
+                     self.proxy_port_info,
+                     response_class=JSONResponse,
+                     methods=[NetworkAPIMethod.BACKEND_PROXY_PORT_INFO]
+                     ),
+            APIRoute(NetworkAPIPath.BACKEND_PROXY_SERVICE_NODES,
+                     self.proxy_service_nodes,
+                     response_class=JSONResponse,
+                     methods=[NetworkAPIMethod.BACKEND_PROXY_SERVICE_NODES]
                      ),
 
         ], log_level='trace', timeout=6000)
@@ -889,3 +905,24 @@ class BackendServer:
         }
         """
         return self.server.get_priority_queue(node)
+
+    async def proxy_node_info(self):
+        """Proxy endpoint for edge containers to get cluster node info"""
+        node_dict = NodeInfo.get_node_info()
+        node_dict_reverse = NodeInfo.get_node_info_reverse()
+        node_role = NodeInfo.get_node_info_role()
+        return {
+            'node_dict': node_dict,
+            'node_dict_reverse': node_dict_reverse,
+            'node_role': node_role
+        }
+
+    async def proxy_port_info(self, keyword: str):
+        """Proxy endpoint for edge containers to get service port info"""
+        ports_dict = PortInfo.get_all_ports(keyword)
+        return {'ports_dict': ports_dict}
+
+    async def proxy_service_nodes(self):
+        """Proxy endpoint for edge containers to get service-node mapping"""
+        service_nodes = KubeConfig.get_service_nodes_dict()
+        return {'service_nodes': service_nodes}

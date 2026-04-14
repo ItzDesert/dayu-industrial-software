@@ -1,6 +1,6 @@
 position: both
 pod-template:
-  image: controller
+  image: controller:shy
   imagePullPolicy: Always
   env:
     - name: DISPLAY

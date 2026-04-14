@@ -55,6 +55,10 @@ class NetworkAPIPath:
     BACKEND_PRIORITY_INFO = '/priority_info'
     BACKEND_PRIORITY_QUEUE = '/priority_queue/{node}'
 
+    BACKEND_PROXY_NODE_INFO = '/proxy/node_info'
+    BACKEND_PROXY_PORT_INFO = '/proxy/port_info/{keyword}'
+    BACKEND_PROXY_SERVICE_NODES = '/proxy/service_nodes'
+
 
 class NetworkAPIMethod:
     CONTROLLER_TASK = 'POST'
@@ -112,3 +116,7 @@ class NetworkAPIMethod:
     BACKEND_RESET_DATASOURCE = 'POST'
     BACKEND_PRIORITY_INFO = 'GET'
     BACKEND_PRIORITY_QUEUE = 'GET'
+
+    BACKEND_PROXY_NODE_INFO = 'GET'
+    BACKEND_PROXY_PORT_INFO = 'GET'
+    BACKEND_PROXY_SERVICE_NODES = 'GET'

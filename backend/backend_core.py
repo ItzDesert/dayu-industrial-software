@@ -53,7 +53,7 @@ class BackendCore:
                 **(dict(eval(vf['hook_params'])) if 'hook_params' in vf else {})
             )
         )
-
+        self.inner_datasource = False
         self.parse_base_info()
 
         self.source_configs = []
@@ -70,7 +70,6 @@ class BackendCore:
         self.log_fetch_url = None
         self.log_clear_url = None
 
-        self.inner_datasource = self.check_simulation_datasource()
         self.source_open = False
         self.source_label = ''
 
@@ -93,6 +92,7 @@ class BackendCore:
         try:
             base_info = self.template_helper.load_base_info()
             self.namespace = base_info['namespace']
+            self.inner_datasource = base_info['datasource']['use-simulation']
             self.image_meta = base_info['default-image-meta']
             self.schedulers = base_info['scheduler-policies']
             self.services = base_info['services']
@@ -191,7 +191,7 @@ class BackendCore:
             time.sleep(1)
         return res, '' if res else 'kubernetes api error'
 
-    @timeout(60)
+    @timeout(300)
     def install_yaml_templates(self, yaml_docs):
         if not yaml_docs:
             return False, 'components yaml data is empty'
