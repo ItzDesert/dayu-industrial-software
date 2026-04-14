@@ -526,6 +526,11 @@ class BackendServer:
             msg = '未知系统错误，请查看后端容器日志'
 
         if result:
+            LOGGER.debug(f'install successfully, inner_datasource: {self.server.inner_datasource}')
+            if not self.server.inner_datasource:
+                LOGGER.debug('ready for submit query')
+                await self.submit_query({'source_label': source_label})
+
             return {'state': 'success', 'msg': '下装服务成功'}
         else:
             return {'state': 'fail', 'msg': f'下装服务失败: {msg}'}
@@ -537,6 +542,9 @@ class BackendServer:
         """
         try:
             result, msg = self.server.parse_and_delete_templates()
+
+            if not self.server.inner_datasource:
+                await self.stop_query()
 
         except Exception as e:
             LOGGER.warning(f'卸载服务失败: {str(e)}')
@@ -570,8 +578,16 @@ class BackendServer:
         {'msg': 'Datasource open successfully'}
         {'msg': 'Invalid service name'}
         """
-
-        data = json.loads(str(data, encoding='utf-8'))
+        LOGGER.debug('start submit query')
+        if isinstance(data, dict):
+            parsed_data = data
+        elif isinstance(data, bytes):
+            parsed_data = json.loads(data.decode("utf-8"))
+        elif isinstance(data, str):
+            parsed_data = json.loads(data)
+        else:
+            raise TypeError(f"Unsupported data type: {type(data)}")
+        data=parsed_data
 
         source_label = data['source_label']
         if not self.server.find_datasource_configuration_by_label(source_label):

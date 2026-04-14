@@ -475,6 +475,7 @@ class BackendCore:
             self.task_results_for_priority.put(copy.deepcopy(task))
 
     def fetch_visualization_data(self, source_id):
+        source_id = int(source_id)
         assert source_id in self.task_results, f'Source_id {source_id} not found in task results!'
         tasks = self.task_results[source_id].get_all()
         vis_results = []

@@ -223,11 +223,13 @@ class TemplateHelper:
 
             new_edge_worker['template']['spec']['nodeName'] = node
 
-            new_edge_worker['template']['spec']['volumes'] = [{'name':'camera-device', 'hostPath':{'path':'/dev/video0', 'type':'CharDevice'}}]
+            new_edge_worker['template']['spec']['volumes'] = [{'name': 'camera-device', 'hostPath': {'path': '/dev/video0', 'type': 'CharDevice'}}]
 
             container = new_edge_worker['template']['spec']['containers'][0]
 
             container['name'] += str(uuid.uuid4())
+            # container['volumeMounts'] = [{'name':'camera-device','mountPath':'/dev/video0'}]
+            container['securityContext']={'privileged': True}
 
             DAG_ENV = {}
             for key in dag.keys():
@@ -255,7 +257,7 @@ class TemplateHelper:
             else:
                 new_edge_worker['template']['spec']['containers'] = [container]
                 edge_workers_dict[node] = new_edge_worker
-
+        LOGGER.debug(edge_workers_dict)
         yaml_doc['spec']['edgeWorker'] = list(edge_workers_dict.values())
 
         return yaml_doc
